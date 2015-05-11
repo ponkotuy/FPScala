@@ -28,16 +28,23 @@ object List {
     case Cons(_, ys) => ys
   }
 
-  /** Execise 3.3 */
+  /** Exercise 3.3 */
   def setHead[A](xs: List[A], head: A): List[A] = xs match {
     case Nil => throw new UnsupportedOperationException
     case Cons(_, ys) => Cons(head, ys)
   }
 
-  /** Execise 3.4 */
+  /** Exercise 3.4 */
   def drop[A](xs: List[A], n: Int): List[A] = xs match {
     case Nil => Nil
     case Cons(_, ys) if n > 0 => drop(ys, n - 1)
+    case ys: Cons[A] => ys
+  }
+
+  /** Exercise 3.5 */
+  def dropWhile[A](xs: List[A], f: A => Boolean): List[A] = xs match {
+    case Nil => Nil
+    case Cons(y, ys) if f(y) => dropWhile(ys, f)
     case ys: Cons[A] => ys
   }
 }
