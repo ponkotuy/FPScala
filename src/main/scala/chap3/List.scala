@@ -27,4 +27,10 @@ object List {
     case Nil => throw new UnsupportedOperationException
     case Cons(_, ys) => ys
   }
+
+  /** Execise 3.3 */
+  def setHead[A](xs: List[A], head: A): List[A] = xs match {
+    case Nil => throw new UnsupportedOperationException
+    case Cons(_, ys) => Cons(head, ys)
+  }
 }
