@@ -33,4 +33,11 @@ object List {
     case Nil => throw new UnsupportedOperationException
     case Cons(_, ys) => Cons(head, ys)
   }
+
+  /** Execise 3.4 */
+  def drop[A](xs: List[A], n: Int): List[A] = xs match {
+    case Nil => Nil
+    case Cons(_, ys) if n > 0 => drop(ys, n - 1)
+    case ys: Cons[A] => ys
+  }
 }
