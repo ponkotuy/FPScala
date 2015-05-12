@@ -7,17 +7,6 @@ case object Nil extends List[Nothing]
 case class Cons[+A](head: A, tail: List[A]) extends List[A]
 
 object List {
-  def sum(ints: List[Int]): Int = ints match {
-    case Nil => 0
-    case Cons(x, xs) => x + sum(xs)
-  }
-
-  def product(ds: List[Double]): Double = ds match {
-    case Nil => 1.0
-    case Cons(0.0, _) => 0.0
-    case Cons(x, xs) => x * product(xs)
-  }
-
   def apply[A](as: A*): List[A] = {
     if(as.isEmpty) Nil else Cons(as.head, apply(as.tail:_*))
   }
@@ -53,11 +42,6 @@ object List {
     case Cons(x, xs) => f(x, foldRight(xs, z)(f))
   }
 
-  /** Exercise 3.9 */
-  def length[A](xs: List[A]): Int = {
-    foldRight(xs, 0)((_, x) => x + 1)
-  }
-
   /** Exercise 3.10 */
   def foldLeft[A, B](as: List[A], z: B)(f: (B, A) => B): B = as match {
     case Nil => z
@@ -65,5 +49,11 @@ object List {
   }
 
   /** Exercise 3.11 */
+  def sum(as: List[Int]): Int = foldLeft(as, 0)(_ + _)
 
+  /** Exercise 3.11 */
+  def product(as: List[Double]): Double = foldLeft(as, 1.0)(_ * _)
+
+  /** Exercise 3.11 */
+  def length(as: List[_]): Int = foldLeft(as, 0)((x, _) => x + 1)
 }
