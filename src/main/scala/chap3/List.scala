@@ -1,5 +1,7 @@
 package chap3
 
+import scala.annotation.tailrec
+
 sealed trait List[+A]
 
 case object Nil extends List[Nothing]
@@ -24,14 +26,14 @@ object List {
   }
 
   /** Exercise 3.4 */
-  def drop[A](xs: List[A], n: Int): List[A] = xs match {
+  @tailrec def drop[A](xs: List[A], n: Int): List[A] = xs match {
     case Nil => Nil
     case Cons(_, ys) if n > 0 => drop(ys, n - 1)
     case ys: Cons[A] => ys
   }
 
   /** Exercise 3.5 */
-  def dropWhile[A](xs: List[A], f: A => Boolean): List[A] = xs match {
+  @tailrec def dropWhile[A](xs: List[A], f: A => Boolean): List[A] = xs match {
     case Nil => Nil
     case Cons(y, ys) if f(y) => dropWhile(ys, f)
     case ys: Cons[A] => ys
@@ -43,7 +45,7 @@ object List {
   }
 
   /** Exercise 3.10 */
-  def foldLeft[A, B](as: List[A], z: B)(f: (B, A) => B): B = as match {
+  @tailrec def foldLeft[A, B](as: List[A], z: B)(f: (B, A) => B): B = as match {
     case Nil => z
     case Cons(x, xs) => foldLeft(xs, f(z, x))(f)
   }
@@ -56,4 +58,7 @@ object List {
 
   /** Exercise 3.11 */
   def length(as: List[_]): Int = foldLeft(as, 0)((x, _) => x + 1)
+
+  /** Exercise 3.12 */
+  def reverse[A](as: List[A]): List[A] = foldLeft[A, List[A]](as, Nil) { (xs, x) => Cons(x, xs) }
 }
