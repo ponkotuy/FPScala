@@ -61,4 +61,14 @@ object List {
 
   /** Exercise 3.12 */
   def reverse[A](as: List[A]): List[A] = foldLeft[A, List[A]](as, Nil) { (xs, x) => Cons(x, xs) }
+
+  /** Exercise 3.14 */
+  def append[A](as: List[A], x: A): List[A] = foldRight(as, List(x))(Cons.apply)
+
+  /** Exercise 3.15 */
+  def concat[A](ass: List[List[A]]): List[A] = {
+    foldRight[List[A], List[A]](ass, Nil) { (ys, xs) =>
+      foldRight(ys, xs) { (z, zs) => Cons(z, zs) }
+    }
+  }
 }
