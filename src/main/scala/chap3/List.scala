@@ -71,4 +71,10 @@ object List {
       foldRight(ys, xs) { (z, zs) => Cons(z, zs) }
     }
   }
+
+  /** Exercise 3.18 */
+  def map[A, B](as: List[A])(f: A => B): List[B] =
+    foldRight[A, List[B]](as, Nil) { (x, xs) =>
+      Cons(f(x), xs)
+    }
 }
