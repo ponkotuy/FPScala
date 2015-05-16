@@ -83,4 +83,7 @@ object List {
     foldRight[A, List[A]](as, Nil) { (x, xs) =>
       if(f(x)) Cons(x, xs) else xs
     }
+
+  /** Exercise 3.20 */
+  def flatMap[A, B](as: List[A])(f: A => List[B]): List[B] = concat(map(as)(f))
 }
