@@ -22,4 +22,10 @@ object Tree {
     case Leaf(_) => 1
     case Branch(left, right) => 1 + depth(left).max(depth(right))
   }
+
+  /** Exercise 28 */
+  def map[A, B](as: Tree[A])(f: A => B): Tree[B] = as match {
+    case Leaf(x) => Leaf(f(x))
+    case Branch(left, right) => Branch(map(left)(f), map(right)(f))
+  }
 }
