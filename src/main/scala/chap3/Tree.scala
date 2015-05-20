@@ -18,7 +18,7 @@ object Tree {
   }
 
   /** Exercise 27 */
-  def depth(as: Tree[Int]): Int = as match {
+  def depth(as: Tree[_]): Int = as match {
     case Leaf(_) => 1
     case Branch(left, right) => 1 + depth(left).max(depth(right))
   }
@@ -27,5 +27,11 @@ object Tree {
   def map[A, B](as: Tree[A])(f: A => B): Tree[B] = as match {
     case Leaf(x) => Leaf(f(x))
     case Branch(left, right) => Branch(map(left)(f), map(right)(f))
+  }
+
+  /** Exercise 29 */
+  def fold[A, B](as: Tree[A])(f: A => B)(g: (B, B) => B): B = as match {
+    case Leaf(x) => f(x)
+    case Branch(left, right) => g(fold(left)(f)(g), fold(right)(f)(g))
   }
 }
