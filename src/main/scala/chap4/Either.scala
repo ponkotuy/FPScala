@@ -22,9 +22,25 @@ sealed trait Either[+E, +A] {
     case (_, Left(_b)) => Left(_b)
   }
 
+  def isLeft: Boolean
+  def isRight: Boolean = !isLeft
+
+  def left: E = this match {
+    case Left(v) => v
+    case Right(_) => throw new RuntimeException(s"Not supported: ${this}.left")
+  }
+
+  def right: A = this match {
+    case Left(_) => throw new RuntimeException(s"Not supported: ${this}.right")
+    case Right(v) => v
+  }
 }
-case class Left[+E](value: E) extends Either[E, Nothing]
-case class Right[+A](value: A) extends Either[Nothing, A]
+case class Left[+E](value: E) extends Either[E, Nothing] {
+  override def isLeft: Boolean = true
+}
+case class Right[+A](value: A) extends Either[Nothing, A] {
+  override def isLeft: Boolean = false
+}
 
 object Either {
   def Try[A](a: => A): Either[Throwable, A] =
