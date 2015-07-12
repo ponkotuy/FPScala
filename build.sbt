@@ -1,2 +1,4 @@
 
-scalaVersion := "2.11.6"
+scalaVersion := "2.11.7"
+
+name := "FPScala Exercise"
