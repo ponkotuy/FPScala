@@ -22,6 +22,15 @@ sealed trait Either[+E, +A] {
     case (_, Left(_b)) => Left(_b)
   }
 
+  /** To Exe8 */
+  import Validation._
+  def map2_[EE >: E, B, C](b: Either[EE, B])(f: (A, B) => C): Validation[EE, C] = (this, b) match {
+    case (Right(x), Right(y)) => Success(f(x, y))
+    case (Left(x), Right(_)) => Failure(List(x))
+    case (Right(_), Left(y)) => Failure(List(y))
+    case (Left(x), Left(y)) => Failure(List(x, y))
+  }
+
   def isLeft: Boolean
   def isRight: Boolean = !isLeft
 
