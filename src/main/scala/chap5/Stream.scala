@@ -29,6 +29,13 @@ trait Stream[+A] {
         case Cons(h, t) => t().drop(n - 1)
       }
     }
+
+  /** Exe3 */
+  def takeWhile(f: A => Boolean): Stream[A] = this match {
+    case Empty => Empty
+    case Cons(h, t) =>
+      if(f(h())) Cons(h, () => t().takeWhile(f)) else Empty
+  }
 }
 
 case object Empty extends Stream[Nothing]
