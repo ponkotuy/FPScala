@@ -69,6 +69,19 @@ trait Stream[+A] {
 
   /** Exe7 */
   def map[B](f: A => B): Stream[B] = foldRight[Stream[B]](empty) { (a, b) => cons(f(a), b) }
+
+  /** Exe7 */
+  def filter(f: A => Boolean): Stream[A] = foldRight[Stream[A]](empty) { (a, b) =>
+    if(f(a)) cons(a, b) else b
+  }
+
+  /** Exe7 */
+  def append[B >: A](x: => B): Stream[B] = foldRight(cons(x, empty)) { (a, b) => cons(a, b) }
+
+  /** Exe7 */
+  def flatMap[B](f: A => Stream[B]): Stream[B] = foldRight[Stream[B]](empty) { (a, b) =>
+    f(a).foldRight(b) { (a, b) => cons(a, b) }
+  }
 }
 
 case object Empty extends Stream[Nothing]
