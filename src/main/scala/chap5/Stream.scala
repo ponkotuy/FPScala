@@ -82,6 +82,8 @@ trait Stream[+A] {
   def flatMap[B](f: A => Stream[B]): Stream[B] = foldRight[Stream[B]](empty) { (a, b) =>
     f(a).foldRight(b) { (a, b) => cons(a, b) }
   }
+
+  def zip[B](ys: Stream[B]): Stream[(A, B)] = Stream.zip(this, ys)
 }
 
 case object Empty extends Stream[Nothing]
@@ -99,5 +101,24 @@ object Stream {
   def apply[A](as: A*): Stream[A] =
     if(as.isEmpty) empty else cons(as.head, apply(as.tail: _*))
 
+  val ones: Stream[Int] = cons(1, ones)
+
   def constant[A](a: A): Stream[A] = cons(a, constant(a))
+
+  def from(n: Int): Stream[Int] = cons(n, from(n + 1))
+
+  def zip[A, B](xs: Stream[A], ys: Stream[B]): Stream[(A, B)] = xs match {
+    case Empty => Empty
+    case Cons(h, t) =>
+      ys match {
+        case Empty => Empty
+        case Cons(h_, t_) =>
+          Cons(() => (h(), h_()), () => zip(t(), t_()))
+      }
+  }
+
+  def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = f(z) match {
+    case None => empty
+    case Some((a, s)) => cons(a, unfold(s)(f))
+  }
 }
