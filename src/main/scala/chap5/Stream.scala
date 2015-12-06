@@ -84,6 +84,19 @@ trait Stream[+A] {
   }
 
   def zip[B](ys: Stream[B]): Stream[(A, B)] = Stream.zip(this, ys)
+
+  /** Exe14 */
+  def startsWith[B >: A](other: Stream[B]): Boolean = Stream.unfold((this, other)) {
+    case (Cons(x, xs), Cons(y, ys)) if x() == y() => Some(true, (xs(), ys()))
+    case (Cons(_, _), Cons(_, _)) => Some(false, (Empty, Empty))
+    case (_, Empty) => None
+  }.forAll(identity)
+
+  /** Exe15 */
+  def tails: Stream[Stream[A]] = cons(this, Stream.unfold(this) {
+    case Cons(_, xs) => Some(xs(), xs())
+    case Empty => None
+  })
 }
 
 case object Empty extends Stream[Nothing]
