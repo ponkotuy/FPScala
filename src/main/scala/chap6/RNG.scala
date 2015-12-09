@@ -25,7 +25,13 @@ object RNG {
     (f(a), rng2)
   }
 
+  def foreach[A](s: Rand[A])(f: A => Unit): Rand[Unit] = { rng =>
+    val (a, rng2) = s(rng)
+    (f(a), rng2)
+  }
+
   def int: Rand[Int] = _.nextInt
+  def nonNegativeInt = map(int)(_ & Int.MaxValue)
   /** Exxe6.5 */
   def double: Rand[Double] = map(rng => rng.nonNegativeInt)(_ / (Int.MaxValue.toDouble + 1.0))
 
@@ -48,5 +54,11 @@ object RNG {
         (a :: as, rngLast)
       case _ => (Nil, rng)
     }
+  }
+
+  /** Exe6.8 */
+  def flatMap[A, B](f: Rand[A])(g: A => Rand[B]): Rand[B] = { rng =>
+    val (a, rng2) = f(rng)
+    g(a)(rng2)
   }
 }
