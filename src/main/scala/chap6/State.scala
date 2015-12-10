@@ -9,6 +9,12 @@ case class State[S, +A](run: S => (A, S)) {
     (f(a), state2)
   }
 
+  def foreach(f: A => Unit): State[S, Unit] = State { state =>
+    val (a, state2) = run(state)
+    f(a)
+    (Unit, state2)
+  }
+
   def flatMap[B](f: A => State[S, B]): State[S, B] = State { state =>
     val (a, state2) = run(state)
     f(a).run(state2)
